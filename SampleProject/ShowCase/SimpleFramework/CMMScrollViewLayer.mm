@@ -1,9 +1,9 @@
 //  Created by JGroup(kimbobv22@gmail.com)
 
-#import "GestureTestLayer.h"
+#import "CMMScrollViewLayer.h"
 #import "HelloWorldLayer.h"
 
-@implementation GestureTestLayer{
+@implementation CMMScrollViewLayer{
 	float _lastScale,_firstRotation;
 	CGPoint _lastPoint;
 	
@@ -11,6 +11,7 @@
 }
 
 -(id)initWithColor:(ccColor4B)color width:(GLfloat)w height:(GLfloat)h{
+    
 	if(!(self = [super initWithColor:color width:w height:h])) return self;
 	
 	tempSprite = [CCSprite spriteWithFile:@"Default.png"];

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		835B45071734D48200E52FD8 /* CMMScrollViewLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 835B45061734D48100E52FD8 /* CMMScrollViewLayer.mm */; };
 		E0025053162128E4001DF0C0 /* CameraTestLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0025052162128E4001DF0C0 /* CameraTestLayer.mm */; };
 		E008574D162543EC009C9BC4 /* CMMEncryptionUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = E008574C162543EC009C9BC4 /* CMMEncryptionUtil.mm */; };
 		E00857551625448B009C9BC4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = E00857521625448A009C9BC4 /* NSData+Base64.m */; };
@@ -311,6 +312,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		835B45051734D48100E52FD8 /* CMMScrollViewLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMMScrollViewLayer.h; sourceTree = "<group>"; };
+		835B45061734D48100E52FD8 /* CMMScrollViewLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMMScrollViewLayer.mm; sourceTree = "<group>"; };
 		E0025051162128E4001DF0C0 /* CameraTestLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraTestLayer.h; sourceTree = "<group>"; };
 		E0025052162128E4001DF0C0 /* CameraTestLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CameraTestLayer.mm; sourceTree = "<group>"; };
 		E008574B162543EC009C9BC4 /* CMMEncryptionUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMMEncryptionUtil.h; path = libs/CMMSimpleFramework/CMMEncryptionUtil.h; sourceTree = "<group>"; };
@@ -986,6 +989,8 @@
 		E02A44B415D4115C005BB6C1 /* SimpleFramework */ = {
 			isa = PBXGroup;
 			children = (
+				835B45051734D48100E52FD8 /* CMMScrollViewLayer.h */,
+				835B45061734D48100E52FD8 /* CMMScrollViewLayer.mm */,
 				E047704615D4BC690079EAE9 /* TestMenu */,
 				E02A462A15D4115F005BB6C1 /* AppDelegate.h */,
 				E02A462B15D4115F005BB6C1 /* AppDelegate.mm */,
@@ -2205,6 +2210,7 @@
 				E0DF97FF171F9FD300318E93 /* vec3.c in Sources */,
 				E0DF9800171F9FD300318E93 /* vec4.c in Sources */,
 				E0DF9B22171FA4FE00318E93 /* CMMControlItemCombo.mm in Sources */,
+				835B45071734D48200E52FD8 /* CMMScrollViewLayer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

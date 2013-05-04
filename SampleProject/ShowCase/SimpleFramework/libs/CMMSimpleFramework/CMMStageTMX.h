@@ -1,18 +1,22 @@
 //  Created by JGroup(kimbobv22@gmail.com)
 
 #import "CMMStage.h"
+#import "CMMGestureDispatcher.h"
+
 
 #define cmmFuncCMMStageTMX_tileYIndex(_curIndex_,_totalTileWidth_) floorf((_curIndex_)/(_totalTileWidth_))
 #define cmmFuncCMMStageTMX_tileXIndex(_curIndex_,_totalTileWidth_,_yIndex_) (_curIndex_) - ((_totalTileWidth_)*(_yIndex_))
 
 @class CMMStageTMX;
 
-@interface CMMStageTMX : CMMStage{
+@interface CMMStageTMX : CMMStage<CMMGestureDelegate>{
 	CCTMXTiledMap *tilemap;
 	CCArray *groundTMXLayers;
 	CMMb2ContactMask b2MaskTile;
 	
+
 	BOOL tilemapBuiltup;
+    float _targetScale;
 	
 	void (^callback_tileBuiltup)(CCTMXLayer *tmxLayer_,float fromXIndex_,float toXIndex_,float yIndex_,b2Fixture *tileFixture_);
 	BOOL (^filter_isSingleTile)(CCTMXLayer *tmxLayer_,CCSprite *tile_,float xIndex_,float yIndex_);

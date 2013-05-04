@@ -3,7 +3,12 @@
 #import "CMMStageTMX.h"
 #import "CMMStringUtil.h"
 
-@implementation CMMStageTMX
+@implementation CMMStageTMX{
+	float _lastScale,_firstRotation;
+	CGPoint _lastPoint;
+	
+	CMMGestureDispatcher *_gestureDispatcher;
+}
 @synthesize tilemap,groundTMXLayers,tilemapBuiltup,callback_tileBuiltup,filter_isSingleTile;
 
 +(id)stageWithStageDef:(CMMStageDef)stageDef_ tmxFileName:(NSString *)tmxFileName_ isInDocument:(BOOL)isInDocument_{
@@ -34,8 +39,89 @@
 	
 	b2MaskTile = CMMb2ContactMaskMake(0x3009,-1,-1,1);
 	
-	return self;
+
+
+    _gestureDispatcher = [[CMMGestureDispatcher alloc] initWithDelegate:self];
+
+    //long press
+    [_gestureDispatcher initializeLongPressRecognizer];
+    [[_gestureDispatcher longPressRecognizer] setMinimumPressDuration:3.0f];
+
+    //pinch, rotation, pan
+    [_gestureDispatcher initializePinchRecognizer];
+    //[_gestureDispatcher initializeRotataionRecognizer];
+    [_gestureDispatcher initializePanRecognizer];
+    [[_gestureDispatcher panRecognizer] setMinimumNumberOfTouches:1];
+
+    return self;
 }
+
+-(void)gestureDispatcher:(CMMGestureDispatcher *)gestureDispatcher_ whenLongPressEvent:(UIPinchGestureRecognizer *)gestureRecognizer_{
+	CCLOG(@"long press gesture fired : %d",[gestureRecognizer_ state]);
+}
+-(void)gestureDispatcher:(CMMGestureDispatcher *)gestureDispatcher_ whenPinchEvent:(UIPinchGestureRecognizer *)gestureRecognizer_{
+	switch([gestureRecognizer_ state]){
+		case UIGestureRecognizerStateBegan:{
+			_lastScale = 1.0f;
+			break;
+		}
+		case UIGestureRecognizerStateChanged:{
+			float curScale_ = [tilemap scale];
+			[tilemap setScale:curScale_ - (curScale_ * (_lastScale - [gestureRecognizer_ scale]))];
+			_lastScale = [gestureRecognizer_ scale];
+			break;
+		}
+		default: break;
+	}
+}
+-(void)gestureDispatcher:(CMMGestureDispatcher *)gestureDispatcher_ whenRotationEvent:(UIRotationGestureRecognizer *)gestureRecognizer_{
+	switch([gestureRecognizer_ state]){
+		case UIGestureRecognizerStateBegan:{
+			_firstRotation = [tilemap rotation];
+			break;
+		}
+		case UIGestureRecognizerStateChanged:{
+			float targetRotation_ = [gestureRecognizer_ rotation];
+			[tilemap setRotation:_firstRotation + CC_RADIANS_TO_DEGREES(targetRotation_)];
+			break;
+		}
+		default: break;
+	}
+}
+-(void)gestureDispatcher:(CMMGestureDispatcher *)gestureDispatcher_ whenPanEvent:(UIPanGestureRecognizer *)gestureRecognizer_{
+	switch([gestureRecognizer_ state]){
+		case UIGestureRecognizerStateBegan:{
+			_lastPoint = CGPointZero;
+			break;
+		}
+		case UIGestureRecognizerStateChanged:{
+			CGPoint targetPoint_ = [gestureRecognizer_ translationInView:[gestureRecognizer_ view]];
+			CGPoint diffPoint_ = ccpSub(targetPoint_, _lastPoint);
+			[tilemap setPosition:ccpAdd([tilemap position], ccp(diffPoint_.x,-diffPoint_.y))];
+			
+			_lastPoint = targetPoint_;
+			
+			break;
+		}
+		default: break;
+	}
+}
+
+-(void)cleanup{
+	[_gestureDispatcher setDelegate:nil];
+    [self setCallback_tileBuiltup:nil];
+	[self setFilter_isSingleTile:nil];
+	[super cleanup];
+}
+-(void)dealloc{
+    [callback_tileBuiltup release];
+	[filter_isSingleTile release];
+	[groundTMXLayers release];
+	[_gestureDispatcher release];
+	[super dealloc];
+}
+
+
 
 -(void)setWorldPoint:(CGPoint)worldPoint_{
 	[super setWorldPoint:worldPoint_];
@@ -52,17 +138,7 @@
 	[super step:dt_];
 }
 
--(void)cleanup{
-	[self setCallback_tileBuiltup:nil];
-	[self setFilter_isSingleTile:nil];
-	[super cleanup];
-}
--(void)dealloc{
-	[callback_tileBuiltup release];
-	[filter_isSingleTile release];
-	[groundTMXLayers release];
-	[super dealloc];
-}
+
 
 @end
 

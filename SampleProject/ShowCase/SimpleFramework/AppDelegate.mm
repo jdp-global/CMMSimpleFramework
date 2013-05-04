@@ -2,6 +2,8 @@
 
 #import "AppDelegate.h"
 #import "CommonIntroLayer.h"
+#import "CMMScrollViewLayer.h"
+
 
 @implementation MyViewController
 
@@ -44,16 +46,41 @@
 		[glView_ setMultipleTouchEnabled:YES];
 		[glView_ setTouchDelegate:[CMMScene sharedScene]];
 		
+        
 		//push scene(only once)
 		[director_ pushScene:[CMMScene sharedScene]];
 		
+        
+       /* CGSize s = [[CCDirector sharedDirector] winSize];
+        CMMScrollViewLayer *sl = [[CMMScrollViewLayer alloc] initWithColor:ccc4(0,1,0,0) width:s.width height:s.height];
+        [[CMMScene sharedScene] pushLayer:sl];*/
+        
+        
+        
+       CGSize targetSize_ = [[CCDirector sharedDirector] winSize];
+        CMMStageDef stageDef_ = CMMStageDefMake(CGSizeMake(targetSize_.width, targetSize_.height),CGSizeMake(1000, 1000),ccp(0,0));
+        
+        CMMStageTMX *stage_ = [CMMStageTMX stageWithStageDef:stageDef_ tmxFileName:@"TMX_SAMPLE_000.tmx" isInDocument:NO];
+        stage_.touchEnabled = YES;
+        [stage_ initializeLightSystem]; // lazy initialization
+        
+        [stage_ setFilter_isSingleTile:^BOOL(CCTMXLayer *tmxLayer_, CCSprite *tile_, float xIndex_, float yIndex_) {
+            return NO;
+        }];
+        [stage_ setCallback_tileBuiltup:^(CCTMXLayer *tmxLayer_, float fromXIndex_, float toXIndex_, float yIndex_, b2Fixture *tileFixture_) {
+            CCLOG(@"tile built up! [ X : %d -> %d , Y: %d ]",(int)fromXIndex_,(int)toXIndex_,(int)yIndex_);
+        }];
+        
+       [[CMMScene sharedScene] pushLayer:stage_];
+        
+        
 		//push layer
-		[[CMMScene sharedScene] pushLayer:[CommonIntroLayer1 node]];
+		//[[CMMScene sharedScene] pushLayer:[CommonIntroLayer1 node]];
 		
 		//add default background
-		CCSprite *defaultBackGround_ = [CCSprite spriteWithFile:@"IMG_CMN_DEFAULT_BACK.png"];
+		/*CCSprite *defaultBackGround_ = [CCSprite spriteWithFile:@"IMG_CMN_DEFAULT_BACK.png"];
 		[defaultBackGround_ setPosition:cmmFunc_positionIPN([CMMScene sharedScene],defaultBackGround_)];
-		[[CMMScene sharedScene] setDefaultBackGroundNode:defaultBackGround_];
+		[[CMMScene sharedScene] setDefaultBackGroundNode:defaultBackGround_];*/
 	}
 }
 
